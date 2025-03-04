@@ -2,11 +2,9 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { auth } from './auth'; // Import your auth instance
-import { User } from 'firebase/auth';
 
 interface AuthContextType {
-  user: User | null;
+  user: { email: string } | null;
   loading: boolean;
 }
 
@@ -16,16 +14,21 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<{ email: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
+    const checkAuth = async () => {
+      const res = await fetch('/api/auth/verify', { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json(); // Expect { email } from Vercel
+        setUser({ email: data.email });
+      } else {
+        setUser(null);
+      }
       setLoading(false);
-    });
-
-    return () => unsubscribe();
+    };
+    checkAuth();
   }, []);
 
   return (

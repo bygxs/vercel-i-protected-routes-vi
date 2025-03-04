@@ -1,24 +1,28 @@
 // app/login/page.tsx
-'use client'; // This is a client component
+'use client';
 
 import { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { app } from '../lib/firebase'; // Assuming you have firebase.ts in lib
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const auth = getAuth(app);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) throw new Error('Login failed');
+      const { token } = await res.json();
+      document.cookie = `token=${token}; path=/`;
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.message);
@@ -70,4 +74,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

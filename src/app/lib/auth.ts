@@ -1,16 +1,18 @@
 // lib/auth.ts
-import { getAuth, signOut } from 'firebase/auth';
-import { app } from './firebase'; // Assuming firebase.ts is in the same directory
-
-const auth = getAuth(app);
+import { cookies } from 'next/headers'; // Server-only
 
 export const logout = async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.error('Error signing out:', error);
-    throw error; // Rethrow to handle it in the component if needed
-  }
+  const res = await fetch('/api/auth/logout', { method: 'POST' });
+  if (!res.ok) throw new Error('Logout failed');
 };
 
-export { auth }; // Export the auth instance for use in other components
+export const verifyAuth = async () => {
+  const cookieStore = cookies();
+  const token = cookieStore.get('token')?.value; // JWT from cookie
+  if (!token) return false;
+  const res = await fetch('/api/auth/verify', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  return res.ok;
+};
