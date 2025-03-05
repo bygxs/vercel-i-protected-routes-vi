@@ -13,6 +13,9 @@ export default function Home() {
             <a href="/login" className="mr-4">
               Login
             </a>
+            <a href="/auth/signup" className="mr-4">
+              Sign Up
+            </a>
             <a href="/dashboard">Dashboard</a>
           </div>
         </div>
@@ -22,10 +25,15 @@ export default function Home() {
         <p>This is a simple app with protected routes.</p>
         <div className="mt-8">
           <a
-            href="/login"
+            href="/auth/login"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
           >
             Login
+          </a>
+          <a href="/auth/signup" // Ensure this points to your signup page
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
+          >
+            Sign Up
           </a>
           <a
             href="/dashboard"
