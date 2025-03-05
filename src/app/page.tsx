@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-      <nav className="bg-white dark:bg-gray-800 p-4">
+      {/* <nav className="bg-white dark:bg-gray-800 p-4">
         <div className="container mx-auto flex justify-between items-center">
           <a href="/" className="text-xl font-bold">
             My App
@@ -19,7 +19,7 @@ export default function Home() {
             <a href="/dashboard">Dashboard</a>
           </div>
         </div>
-      </nav>
+      </nav> */}
       <main className="container mx-auto p-4">
         <h1 className="text-3xl font-bold mb-4">Welcome to My App</h1>
         <p>This is a simple app with protected routes.</p>
